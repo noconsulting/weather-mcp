@@ -28,7 +28,7 @@ jobs:
           password: ${{ secrets.DOCKER_REGISTRY_PWD }}
 
       - name: Install dependencies
-        run: mvnw package -Dnative
+        run: mvn package -Dnative
 
       - name: Build and push
         uses: docker/build-push-action@v6
