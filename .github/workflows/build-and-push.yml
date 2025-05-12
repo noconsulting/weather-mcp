@@ -34,6 +34,6 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: .
-          file: src/main/docker/Dockerfile.native
+          file: src/main/docker/Dockerfile.native-micro
           push: true
           tags: registry.srv817320.hstgr.cloud/noc/weather-mcp:latest
