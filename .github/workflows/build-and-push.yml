@@ -1,0 +1,41 @@
+name: Build and push docker image
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'graalvm'
+          cache: "maven"
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: https://registry.srv817320.hstgr.cloud
+          username: ${{ secrets.DOCKER_REGISTRY_USR }}
+          password: ${{ secrets.DOCKER_REGISTRY_PWD }}
+
+      - name: Install dependencies
+        run: mvnw package -Dnative
+
+      - name: Build and push
+        uses: docker/build-push-action@v6
+        with:
+          context: src/main/docker/Dockerfile.native
+          push: true
+          tags: registry.srv817320.hstgr.cloud/noc/weather-mcp:latest
